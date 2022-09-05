@@ -2,8 +2,11 @@
 from src.domain.validators.validator import ClientValidator, CarValidator
 from src.domain.client.model import ClientModel
 from src.domain.cars.model import CarModel
-from src.domain.exceptions.service.exception import CarLimitExceeded
+from src.domain.exceptions.service.exception import CarLimitExceeded, ClientNotExists
 from src.repositories.sqlite.repository import SqliteRepository
+
+# Third party
+from decouple import config
 
 
 class ClientService:
@@ -21,13 +24,16 @@ class ClientService:
         return True
 
     @classmethod
-    async def linking_car_to_owner(cls, payload_validated: CarValidator, client_id: int):
+    async def linking_car_to_owner(cls, payload_validated: CarValidator, client_id: int) -> bool:
+        await cls.check_if_client_exists(client_id=client_id)
+        await cls.check_if_client_can_have_more_cars(client_id=client_id)
+        color = payload_validated.color.value
+        model = payload_validated.model.value
         new_car_linking = CarModel(
-            color=payload_validated.color,
-            model=payload_validated.model,
+            color=color,
+            model=model,
             client_id=client_id
         )
-        await cls.check_if_client_can_have_more_cars(client_id=client_id)
         cls.repository.insert_car(car=new_car_linking)
         cls.repository.update_sale_opportunity_status(client_id=client_id)
         return True
@@ -35,13 +41,12 @@ class ClientService:
     @classmethod
     async def check_if_client_can_have_more_cars(cls, client_id: int):
         cars = cls.repository.get_all_cars(client_id=client_id)
-        count = 0
-        # result = [count + 1 for car in cars] if count < 3 else False
-        for car in cars:
-            count += 1
-        if count > 2:
+        result = [car for car in cars]
+        if len(result) > int(config("CAR_LIMIT")):
             raise CarLimitExceeded
-        return True
 
-
-
+    @classmethod
+    async def check_if_client_exists(cls, client_id: int):
+        client = cls.repository.get_client(client_id=client_id)
+        if not client:
+            raise ClientNotExists

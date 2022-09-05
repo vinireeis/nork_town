@@ -3,8 +3,8 @@ from src.domain.enums.options.enum import ColorOptions, CarModelTypes
 
 
 class CarValidator(BaseModel):
-    color = ColorOptions
-    model = CarModelTypes
+    color: ColorOptions
+    model: CarModelTypes
 
     class Config:
         extra = Extra.forbid

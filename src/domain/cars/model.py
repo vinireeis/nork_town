@@ -17,6 +17,6 @@ class CarModel(Base):
     client_id = Column(Integer, nullable=False)
 
     def __int__(self, color: ColorOptions, model: CarModelTypes, client_id: int):
-        self.color = color.value
-        self.model = model.value
+        self.color = color
+        self.model = model
         self.client_id = client_id

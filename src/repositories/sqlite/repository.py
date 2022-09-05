@@ -35,6 +35,13 @@ class SqliteRepository:
         cars = session.query(CarModel).filter(CarModel.client_id == client_id)
         return cars
 
+    @classmethod
+    def get_client(cls, client_id: int):
+        session = cls.infra.get_session()
+        client = session.query(ClientModel).get(client_id)
+        return client
+
+
 
 
 
