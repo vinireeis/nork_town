@@ -52,9 +52,3 @@ class SqliteRepository:
         session = cls.infra.get_session()
         clients = session.query(CarModel).all()
         return clients
-
-
-
-
-
-

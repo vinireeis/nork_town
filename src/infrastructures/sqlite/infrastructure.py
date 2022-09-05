@@ -27,22 +27,22 @@ class SqliteInfrastructure:
 
     @classmethod
     def script_create_client_table(cls):
-        sql_script = ("""CREATE TABLE IF NOT EXISTS CLIENT(
+        sql_script = """CREATE TABLE IF NOT EXISTS CLIENT(
                         ID INTEGER PRIMARY KEY,
                         EMAIL VARCHAR (60),
                         NAME VARCHAR (50),
                         SALE_OPPORTUNITY INT)
-                   """)
+                   """
         connection = cls.__get_connection()
         connection.execute(sql_script)
 
     @classmethod
     def script_create_car_table(cls):
-        sql_script = ("""CREATE TABLE IF NOT EXISTS CAR(
+        sql_script = """CREATE TABLE IF NOT EXISTS CAR(
                         ID INTEGER PRIMARY KEY,
                         MODEL VARCHAR (11),
                         COLOR VARCHAR (10),
                         CLIENT_ID INTEGER)
-                   """)
+                   """
         connection = cls.__get_connection()
         connection.execute(sql_script)
