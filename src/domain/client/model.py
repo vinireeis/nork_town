@@ -16,3 +16,12 @@ class ClientModel(Base):
         self.name = name
         self.sale_opportunity = sale_opportunity
         self.email = email
+
+    def as_dict(self):
+        client = {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "sale_opportunity": self.sale_opportunity,
+        }
+        return client

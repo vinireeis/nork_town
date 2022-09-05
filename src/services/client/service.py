@@ -40,13 +40,29 @@ class ClientService:
 
     @classmethod
     async def check_if_client_can_have_more_cars(cls, client_id: int):
-        cars = cls.repository.get_all_cars(client_id=client_id)
+        cars = cls.repository.get_all_cars_by_id(client_id=client_id)
         result = [car for car in cars]
         if len(result) > int(config("CAR_LIMIT")):
             raise CarLimitExceeded
 
     @classmethod
     async def check_if_client_exists(cls, client_id: int):
-        client = cls.repository.get_client(client_id=client_id)
+        client = cls.repository.get_client_by_id(client_id=client_id)
         if not client:
             raise ClientNotExists
+
+    @classmethod
+    async def get_all_clients(cls):
+        clients = cls.repository.get_all_clients()
+        result = {
+            "clients": [client.as_dict() for client in clients]
+        }
+        return result
+
+    @classmethod
+    async def get_all_cars(cls):
+        cars = cls.repository.get_all_cars()
+        result = {
+            "cars": [car.as_dict() for car in cars]
+        }
+        return result

@@ -19,9 +19,9 @@ async def register_new_client() -> Response:
     try:
         raw_payload = request.json
         payload_validated = ClientValidator(**raw_payload)
-        result = await ClientService.register_new_client(payload_validated=payload_validated)
+        success = await ClientService.register_new_client(payload_validated=payload_validated)
         response = {
-            "result": result,
+            "success": success,
             "message": "client registered successfully"
         }
         return Response(dumps(response), status=HTTPStatus.OK)
@@ -35,8 +35,26 @@ async def register_new_client() -> Response:
     except Exception as ex:
         logger.error(ex)
         response = {
-            "result": False,
+            "success": False,
             "message": "Error on register new client"
+        }
+        return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@app.route("/clients")
+async def list_all_clients():
+    try:
+        result = await ClientService.get_all_clients()
+        response = {
+            "success": True,
+            "result": result,
+        }
+        return Response(dumps(response), status=HTTPStatus.OK)
+    except Exception as ex:
+        logger.error(ex)
+        response = {
+            "success": False,
+            "message": "Error on get clients"
         }
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
@@ -48,14 +66,14 @@ async def add_new_car_in_client(client_id: int) -> Response:
         payload_validated = CarValidator(**raw_payload)
         result = await ClientService.linking_car_to_owner(client_id=client_id, payload_validated=payload_validated)
         response = {
-            "result": result,
+            "success": result,
             "message": "successfully registered car"
         }
         return Response(dumps(response))
     except CarLimitExceeded as ex:
         logger.info(ex)
         response = {
-            "result": False,
+            "success": False,
             "message": "Customer cannot have more than three cars, by Nork Town mayor."
         }
         return Response(dumps(response), status=HTTPStatus.OK)
@@ -69,14 +87,32 @@ async def add_new_car_in_client(client_id: int) -> Response:
     except ValueError as ex:
         logger.error(ex)
         response = {
-            "result": False,
+            "success": False,
             "message": "Invalid params"
         }
         return Response(dumps(response), status=HTTPStatus.BAD_REQUEST)
     except Exception as ex:
         logger.error(ex)
         response = {
-            "result": False,
+            "success": False,
             "message": "Error on linking car on the owner"
+        }
+        return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@app.route("/cars")
+async def list_all_cars():
+    try:
+        result = await ClientService.get_all_cars()
+        response = {
+            "success": True,
+            "result": result,
+        }
+        return Response(dumps(response), status=HTTPStatus.OK)
+    except Exception as ex:
+        logger.error(ex)
+        response = {
+            "success": False,
+            "message": "Error on get cars list"
         }
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)

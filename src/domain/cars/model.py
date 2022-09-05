@@ -20,3 +20,12 @@ class CarModel(Base):
         self.color = color
         self.model = model
         self.client_id = client_id
+
+    def as_dict(self):
+        car = {
+            "id": self.id,
+            "color": self.color,
+            "model": self.model,
+            "client_id": self.client_id,
+        }
+        return car

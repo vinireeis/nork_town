@@ -30,16 +30,28 @@ class SqliteRepository:
         session.close()
 
     @classmethod
-    def get_all_cars(cls, client_id: int):
+    def get_all_cars_by_id(cls, client_id: int):
         session = cls.infra.get_session()
         cars = session.query(CarModel).filter(CarModel.client_id == client_id)
         return cars
 
     @classmethod
-    def get_client(cls, client_id: int):
+    def get_client_by_id(cls, client_id: int):
         session = cls.infra.get_session()
         client = session.query(ClientModel).get(client_id)
         return client
+
+    @classmethod
+    def get_all_clients(cls):
+        session = cls.infra.get_session()
+        clients = session.query(ClientModel).all()
+        return clients
+
+    @classmethod
+    def get_all_cars(cls):
+        session = cls.infra.get_session()
+        clients = session.query(CarModel).all()
+        return clients
 
 
 
