@@ -5,7 +5,8 @@ WORKDIR /nork_town
 
 # Install pip requirements
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+COPY requirements-dev.txt .
+RUN pip install -r requirements-dev.txt
 
 # PORT
 EXPOSE 5000
@@ -16,4 +17,4 @@ COPY . .
 ENV HOST_URL="sqlite:///server.db"
 ENV CAR_LIMIT=2
 
-CMD ["flask", "--app", "main.py", "run", "--host=0.0.0.0:5000"]
+CMD ["flask", "--app", "main.py", "run", "--host", "0.0.0.0", "-p", "5000"]
