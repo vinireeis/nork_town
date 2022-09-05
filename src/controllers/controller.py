@@ -11,7 +11,13 @@ from http import HTTPStatus
 from flask import Flask, Response, request
 from loguru import logger
 
-app = Flask("Nork_Town")
+app = Flask("nork_town")
+
+
+@app.route('/')
+async def work_on() -> Response:
+    response = {"success": True, "message": "Nork Town API is working"}
+    return Response(dumps(response))
 
 
 @app.route("/client/register", methods=["POST"])
