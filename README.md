@@ -68,15 +68,15 @@ CAR_LIMIT=2
 
 ## **Endpoints:**
 
-### "/clients"
+### "/customers"
 
-> _Endpoint to get all registered clients_
+> _Endpoint to get all registered customers_
 
 ## Requisition
 
 #### **request template on route HTTP:**
 ~~~
-http:{host}/clients
+http:{host}/customers
 ~~~
 
 ## Response
@@ -85,7 +85,7 @@ http:{host}/clients
 
 ```json
 {
-  "result": ["list of clients"],
+  "result": ["list of customers"],
   "success": "request success, True or False",
 }
 ```
@@ -98,7 +98,7 @@ http:{host}/clients
 {
   "success": true,
   "result": {
-    "clients": [
+    "customers": [
       {
         "id": 1,
         "name": "Larissa Reis",
@@ -169,31 +169,31 @@ http:{host}/cars
         "id": 2,
         "color": "blue",
         "model": "hatch",
-        "client_id": 1
+        "customer_id": 1
       },
       {
         "id": 3,
         "color": "yellow",
         "model": "convertible",
-        "client_id": 1
+        "customer_id": 1
       },
       {
         "id": 4,
         "color": "blue",
         "model": "sedan",
-        "client_id": 1
+        "customer_id": 1
       },
       {
         "id": 5,
         "color": "blue",
         "model": "sedan",
-        "client_id": 5
+        "customer_id": 5
       },
       {
         "id": 6,
         "color": "blue",
         "model": "sedan",
-        "client_id": 5
+        "customer_id": 5
       }
     ]
   }
@@ -201,15 +201,15 @@ http:{host}/cars
 ```
 
 
-### "/client/register"
+### "/customer/register"
 
-> _Endpoint to register a new client_
+> _Endpoint to register a new customer_
 
 ## Requisition
 
 #### **request template on route HTTP:**
 ~~~
-http:{host}//client/register
+http:{host}//customer/register
 ~~~
 #### **body:**
 ```json
@@ -241,11 +241,11 @@ the parameter sale_opportunity can be or not informed, by default is True
 ```json
 {
     "success": true,
-    "message": "client registered successfully"
+    "message": "buyer_management registered successfully"
 }
 ```
 
-### "/linking-car/<client_id>"
+### "/linking-car/<customer_id>"
 
 > _Endpoint linking a car to an owner_
 
@@ -263,7 +263,7 @@ http:{host}//linking-car/1
 }
 ```
 ~~~
-you can only link a car to a client_id that already exists
+you can only link a car to a customer_id that already exists
 ~~~
 
 ## Response

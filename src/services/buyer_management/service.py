@@ -3,7 +3,7 @@ from src.domain.validators.validator import ClientValidator, CarValidator
 from src.domain.client.model import ClientModel
 from src.domain.cars.model import CarModel
 from src.domain.exceptions.service.exception import CarLimitExceeded, ClientNotExists
-from src.repositories.sqlite.repository import SqliteRepository
+from src.repositories.sqlite.customer.repository import CustomerRepository
 
 # Third party
 from decouple import config
@@ -11,7 +11,7 @@ from decouple import config
 
 class ClientService:
 
-    repository = SqliteRepository
+    repository = CustomerRepository
 
     @classmethod
     async def register_new_client(cls, payload_validated: ClientValidator):
@@ -20,7 +20,7 @@ class ClientService:
             sale_opportunity=payload_validated.sale_opportunity,
             email=payload_validated.email,
         )
-        cls.repository.insert_client(client=new_client)
+        cls.repository.insert_customer(client=new_client)
         return True
 
     @classmethod
@@ -38,20 +38,20 @@ class ClientService:
 
     @classmethod
     async def check_if_client_can_have_more_cars(cls, client_id: int):
-        cars = cls.repository.get_all_cars_by_id(client_id=client_id)
+        cars = cls.repository.get_all_cars_by_id(customer_id=client_id)
         result = [car for car in cars]
         if len(result) > int(config("CAR_LIMIT")):
             raise CarLimitExceeded
 
     @classmethod
     async def check_if_client_exists(cls, client_id: int):
-        client = cls.repository.get_client_by_id(client_id=client_id)
+        client = cls.repository.get_customer_by_id(customer_id=client_id)
         if not client:
             raise ClientNotExists
 
     @classmethod
     async def get_all_clients(cls):
-        clients = cls.repository.get_all_clients()
+        clients = cls.repository.get_all_customer()
         result = {"clients": [client.as_dict() for client in clients]}
         return result
 
