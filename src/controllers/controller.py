@@ -1,6 +1,6 @@
 # Nork_Town
 from src.domain.validators.validator import CustomerValidator, CarValidator
-from src.domain.exceptions.service.exception import CarLimitExceeded, CustomerNotExists
+from src.domain.exceptions.service.exception import CarLimitExceeded, CustomerNotExists, CarNotExists
 from src.services.buyer_management.service import BuyerManagementService
 
 # Standards
@@ -39,6 +39,24 @@ async def register_new_customer() -> Response:
     except Exception as ex:
         logger.error(ex)
         response = {"success": False, "message": "Error on register new buyer_management"}
+        return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@app.route("/customer/<int:customer_id>", methods=["DELETE"])
+async def delete_one_customer(customer_id: int):
+    try:
+        success = await BuyerManagementService.delete_costumer(customer_id=customer_id)
+        response = {"success": success, "message": "Customer data deleted with successfully"}
+        return Response(dumps(response), status=HTTPStatus.OK)
+
+    except CustomerNotExists as ex:
+        logger.info(ex)
+        response = {"result": False, "message": "Invalid customer id"}
+        return Response(dumps(response), status=HTTPStatus.BAD_REQUEST)
+
+    except Exception as ex:
+        logger.error(ex)
+        response = {"success": False, "message": "Error on trying to delete car data"}
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
@@ -106,4 +124,22 @@ async def list_all_cars():
     except Exception as ex:
         logger.error(ex)
         response = {"success": False, "message": "Error on get car list"}
+        return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@app.route("/car/<int:car_id>", methods=["DELETE"])
+async def delete_one_car(car_id: int):
+    try:
+        success = await BuyerManagementService.delete_car(car_id=car_id)
+        response = {"success": success, "message": "car data deleted with successfully"}
+        return Response(dumps(response), status=HTTPStatus.OK)
+
+    except CarNotExists as ex:
+        logger.info(ex)
+        response = {"result": False, "message": "Car id invalid."}
+        return Response(dumps(response), status=HTTPStatus.BAD_REQUEST)
+
+    except Exception as ex:
+        logger.error(ex)
+        response = {"success": False, "message": "Error on trying to delete car data"}
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)

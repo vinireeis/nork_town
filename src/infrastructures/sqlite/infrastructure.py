@@ -26,8 +26,8 @@ class SqliteInfrastructure:
         return cls.session
 
     @classmethod
-    def script_create_client_table(cls):
-        sql_script = """CREATE TABLE IF NOT EXISTS CLIENT(
+    def script_create_customer_table(cls):
+        sql_script = """CREATE TABLE IF NOT EXISTS CUSTOMER(
                         ID INTEGER PRIMARY KEY,
                         EMAIL VARCHAR (60),
                         NAME VARCHAR (50),
@@ -42,7 +42,8 @@ class SqliteInfrastructure:
                         ID INTEGER PRIMARY KEY,
                         MODEL VARCHAR (11),
                         COLOR VARCHAR (10),
-                        CLIENT_ID INTEGER)
+                        CUSTOMER_ID INTEGER)
                    """
         connection = cls.__get_connection()
         connection.execute(sql_script)
+

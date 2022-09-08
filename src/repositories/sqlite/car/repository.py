@@ -34,3 +34,10 @@ class CarRepository:
         session = cls.infra.get_session()
         car = session.query(CarModel).get(car_id)
         return car
+
+    @classmethod
+    def delete_car_by_id(cls, car_id: int):
+        print(type(car_id))
+        session = cls.infra.get_session()
+        session.query(CarModel).filter(CarModel.id == car_id).delete()
+        cls.commit_changes_and_close_session(session=session)

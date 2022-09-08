@@ -6,7 +6,7 @@ Base = declarative_base()
 
 
 class CustomerModel(Base):
-    __tablename__ = "CLIENT"
+    __tablename__ = "CUSTOMER"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(15), nullable=False)
     email = Column(String(60), nullable=False)

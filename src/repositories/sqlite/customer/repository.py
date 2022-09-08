@@ -42,4 +42,8 @@ class CustomerRepository:
         session.query(CustomerModel).get(customer_id).update(customer_updated)
         cls.commit_changes_and_close_session(session=session)
 
-
+    @classmethod
+    def delete_customer_by_id(cls, customer_id: int):
+        session = cls.infra.get_session()
+        session.query(CustomerModel).filter(CustomerModel.id == customer_id).delete()
+        cls.commit_changes_and_close_session(session=session)
