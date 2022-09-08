@@ -14,18 +14,18 @@ class CarModel(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     color = Column(String(8), nullable=False)
     model = Column(String(15), nullable=False)
-    client_id = Column(Integer, nullable=False)
+    customer_id = Column(Integer, nullable=False)
 
-    def __int__(self, color: ColorOptions, model: CarModelTypes, client_id: int):
+    def __int__(self, color: ColorOptions, model: CarModelTypes, customer_id: int):
         self.color = color
         self.model = model
-        self.client_id = client_id
+        self.customer_id = customer_id
 
     def as_dict(self):
         car = {
             "id": self.id,
             "color": self.color,
             "model": self.model,
-            "client_id": self.client_id,
+            "customer_id": self.customer_id,
         }
         return car

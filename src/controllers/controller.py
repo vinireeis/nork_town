@@ -1,7 +1,7 @@
 # Nork_Town
-from src.domain.validators.validator import ClientValidator, CarValidator
-from src.domain.exceptions.service.exception import CarLimitExceeded, ClientNotExists
-from src.services.client.service import ClientService
+from src.domain.validators.validator import CustomerValidator, CarValidator
+from src.domain.exceptions.service.exception import CarLimitExceeded, CustomerNotExists
+from src.services.buyer_management.service import BuyerManagementService
 
 # Standards
 from json import dumps
@@ -20,15 +20,15 @@ async def work_on() -> Response:
     return Response(dumps(response))
 
 
-@app.route("/client/register", methods=["POST"])
-async def register_new_client() -> Response:
+@app.route("/customer/register", methods=["POST"])
+async def register_new_customer() -> Response:
     try:
         raw_payload = request.json
-        payload_validated = ClientValidator(**raw_payload)
-        success = await ClientService.register_new_client(
+        payload_validated = CustomerValidator(**raw_payload)
+        success = await BuyerManagementService.register_new_customer(
             payload_validated=payload_validated
         )
-        response = {"success": success, "message": "client registered successfully"}
+        response = {"success": success, "message": "buyer_management registered successfully"}
         return Response(dumps(response), status=HTTPStatus.OK)
 
     except ValueError as ex:
@@ -38,14 +38,14 @@ async def register_new_client() -> Response:
 
     except Exception as ex:
         logger.error(ex)
-        response = {"success": False, "message": "Error on register new client"}
+        response = {"success": False, "message": "Error on register new buyer_management"}
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
-@app.route("/clients")
-async def list_all_clients():
+@app.route("/customers")
+async def list_all_customers():
     try:
-        result = await ClientService.get_all_clients()
+        result = await BuyerManagementService.get_all_customers()
         response = {
             "success": True,
             "result": result,
@@ -54,17 +54,17 @@ async def list_all_clients():
 
     except Exception as ex:
         logger.error(ex)
-        response = {"success": False, "message": "Error on get clients"}
+        response = {"success": False, "message": "Error on get customers"}
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
-@app.route("/linking-car/<int:client_id>", methods=["POST"])
-async def add_new_car_in_client(client_id: int) -> Response:
+@app.route("/linking-car/<int:customer_id>", methods=["POST"])
+async def add_new_car_in_customer(customer_id: int) -> Response:
     try:
         raw_payload = request.json
         payload_validated = CarValidator(**raw_payload)
-        result = await ClientService.linking_car_to_owner(
-            client_id=client_id, payload_validated=payload_validated
+        result = await BuyerManagementService.linking_car_to_owner(
+            customer_id=customer_id, payload_validated=payload_validated
         )
         response = {"success": result, "message": "successfully registered car"}
         return Response(dumps(response))
@@ -73,11 +73,11 @@ async def add_new_car_in_client(client_id: int) -> Response:
         logger.info(ex)
         response = {
             "success": False,
-            "message": "Customer cannot have more than three cars, by Nork Town mayor.",
+            "message": "Customer cannot have more than three car, by Nork Town mayor.",
         }
         return Response(dumps(response), status=HTTPStatus.OK)
 
-    except ClientNotExists as ex:
+    except CustomerNotExists as ex:
         logger.info(ex)
         response = {"result": False, "message": "Customer id invalid."}
         return Response(dumps(response), status=HTTPStatus.BAD_REQUEST)
@@ -96,7 +96,7 @@ async def add_new_car_in_client(client_id: int) -> Response:
 @app.route("/cars")
 async def list_all_cars():
     try:
-        result = await ClientService.get_all_cars()
+        result = await BuyerManagementService.get_all_cars()
         response = {
             "success": True,
             "result": result,
@@ -105,5 +105,5 @@ async def list_all_cars():
 
     except Exception as ex:
         logger.error(ex)
-        response = {"success": False, "message": "Error on get cars list"}
+        response = {"success": False, "message": "Error on get car list"}
         return Response(dumps(response), status=HTTPStatus.INTERNAL_SERVER_ERROR)

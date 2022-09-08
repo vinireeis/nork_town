@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, Boolean
 Base = declarative_base()
 
 
-class ClientModel(Base):
+class CustomerModel(Base):
     __tablename__ = "CLIENT"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(15), nullable=False)
@@ -18,10 +18,10 @@ class ClientModel(Base):
         self.email = email
 
     def as_dict(self):
-        client = {
+        customer = {
             "id": self.id,
             "name": self.name,
             "email": self.email,
             "sale_opportunity": self.sale_opportunity,
         }
-        return client
+        return customer

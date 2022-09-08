@@ -10,7 +10,7 @@ class CarValidator(BaseModel):
         extra = Extra.forbid
 
 
-class ClientValidator(BaseModel):
+class CustomerValidator(BaseModel):
     name: constr(max_length=60)
     email: constr(max_length=60)
     sale_opportunity: bool = True

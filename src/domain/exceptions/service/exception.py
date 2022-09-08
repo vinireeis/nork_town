@@ -6,5 +6,5 @@ class CarLimitExceeded(ServiceException):
     pass
 
 
-class ClientNotExists(ServiceException):
+class CustomerNotExists(ServiceException):
     pass
