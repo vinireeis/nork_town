@@ -1,4 +1,4 @@
-## Mjolnir Rest Api
+## nork town challenge
 
 ### **Technologies/Frameworks/Libs used:**
 
